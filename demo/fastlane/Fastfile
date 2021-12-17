@@ -1,0 +1,142 @@
+#
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+import "helpers"
+
+# Uncomment the line if you want fastlane to automatically update itself
+#update_fastlane
+
+app_name = "SumSubCordova"
+
+check_env
+info = print_plugin_info
+
+platform :ios do
+
+  scheme_name = "SumSubCordova"
+
+  project_dir = "./platforms/ios"
+  project_name = "SumSubCordova"
+  project_file = "#{project_dir}/#{project_name}.xcodeproj"
+
+  build_dir = "#{project_dir}/build"
+  ipa_name = "#{app_name}.ipa"
+  ipa_file = "#{build_dir}/#{ipa_name}"
+
+  cflags = oneline(%{
+    -Wno-deprecated-declarations
+    -Wno-deprecated-implementations
+    -Wno-documentation
+    -Wno-documentation-deprecated-sync
+    -Wno-nullability-completeness
+    -Wno-unused-variable
+  })
+
+  before_all do |lane, options|
+    unless options[:skip_ios_clean_check]
+      check_ios_is_clean
+    end
+
+    if ENV['KEYCHAIN_PATH'] && ENV['KEYCHAIN_PASSWORD']
+      unlock_keychain(
+        path: ENV['KEYCHAIN_PATH'],
+        password: ENV['KEYCHAIN_PASSWORD']
+      )
+    end
+  end
+
+  desc "Makes #{ipa_file}"
+  lane :build do |options|
+    unless options[:skip_pod_install]
+      cocoapods(
+        podfile: project_dir
+      )
+    end
+    build_app(
+      workspace: "#{project_dir}/#{project_name}.xcworkspace", 
+      scheme: scheme_name,
+      configuration: "Release",
+
+      include_symbols: true,
+      include_bitcode: false,
+
+      clean: true,
+
+      output_directory: build_dir,
+      build_path: build_dir,
+      buildlog_path: build_dir,
+
+      derived_data_path: "#{build_dir}/DerivedData",
+      archive_path: "#{build_dir}/#{app_name}.xcarchive",
+      output_name: ipa_name,
+
+      xcargs: oneline(%{
+        -allowProvisioningUpdates
+        OTHER_CFLAGS='#{cflags}'
+      }),
+
+      export_xcargs: oneline(%{
+        -allowProvisioningUpdates
+      }),
+
+      export_options: {
+        method: "app-store",
+        stripSwiftSymbols: true
+      }
+    )
+  end
+
+  desc "Updates the build number, builds then pushes .ipa to TestFlight"
+  lane :beta do |options|
+
+    unless options[:increment_and_commit]
+      options[:set_build_number_by_number_of_commits] = true
+      options[:stash_changes_after_build] = true
+    end
+
+    app_store_connect_api_key if could_use_api_key
+      
+    version = get_version_number(
+      xcodeproj: project_file,
+      target: project_name
+    )
+
+    patch = increment_build_number(
+      xcodeproj: project_file,
+      build_number: guess_new_build_number(options)
+    )
+
+    build(
+    )
+
+    unless stash_ios_if_required(options)
+      commit_version_bump(
+        xcodeproj: project_file,
+        message: "demo: bump ios app version to #{version} build ##{patch}"
+      )
+    end
+
+    commit = last_git_commit
+    what_to_test = "#{app_name} #{version} build ##{patch}\n#{info["name"]} v#{info["version"]}\n#{idensic_sdk_stamp}\nlast_commit: #{commit[:commit_hash]}"
+    
+    upload_to_testflight(
+      ipa: ipa_file,
+      changelog: what_to_test,
+      localized_build_info: {
+        'en-US': {
+          whats_new: what_to_test
+        }
+      }
+    )
+  end
+end

@@ -1,0 +1,47 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-advanced-http": {
+      "PACKAGE_NAME": "com.sumsub.SumSubCordova"
+    },
+    "cordova-plugin-androidx": {
+      "PACKAGE_NAME": "com.sumsub.SumSubCordova"
+    },
+    "cordova-plugin-androidx-adapter": {
+      "PACKAGE_NAME": "com.sumsub.SumSubCordova"
+    },
+    "cordova-plugin-console": {
+      "PACKAGE_NAME": "com.sumsub.SumSubCordova"
+    },
+    "cordova-plugin-enable-multidex": {
+      "PACKAGE_NAME": "com.sumsub.SumSubCordova"
+    },
+    "cordova-plugin-qr-barcode-scanner": {
+      "ANDROID_SUPPORT_V4_VERSION": "27.+",
+      "PACKAGE_NAME": "com.sumsub.SumSubCordova"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.sumsub.SumSubCordova"
+    },
+    "cordova-plugin-wkwebview-engine": {
+      "PACKAGE_NAME": "com.sumsub.SumSubCordova"
+    },
+    "cordova-plugin-timer": {
+      "PACKAGE_NAME": "com.sumsub.SumSubCordova"
+    },
+    "cordova-idensic-mobile-sdk-plugin": {
+      "PACKAGE_NAME": "com.sumsub.SumSubCordova"
+    }
+  },
+  "dependent_plugins": {
+    "cordova-plugin-file": {
+      "PACKAGE_NAME": "com.sumsub.SumSubCordova"
+    }
+  }
+}

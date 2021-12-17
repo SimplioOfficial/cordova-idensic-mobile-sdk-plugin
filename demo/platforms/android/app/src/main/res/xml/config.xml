@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget android-versionCode="11802" id="com.sumsub.SumSubCordova" version="1.18.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <feature name="File">
+        <param name="android-package" value="org.apache.cordova.file.FileUtils" />
+        <param name="onload" value="true" />
+    </feature>
+    <allow-navigation href="cdvfile:*" />
+    <feature name="CordovaHttpPlugin">
+        <param name="android-package" value="com.silkimen.cordovahttp.CordovaHttpPlugin" />
+    </feature>
+    <feature name="BarcodeScanner">
+        <param name="android-package" value="com.phonegap.plugins.barcodescanner.BarcodeScanner" />
+    </feature>
+    <feature name="Whitelist">
+        <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="NativeTimer">
+        <param name="android-package" value="com.applurk.nativetimer.NativeTimerPlugin" />
+    </feature>
+    <feature name="SNSMobileSdkCordovaPlugin">
+        <param name="android-package" value="com.sumsub.msdk.plugins.cordova.SNSMobileSdkCordovaPlugin" />
+    </feature>
+    <name>SumSubCordova</name>
+    <description>
+        Demonstrates the usage of the Sumsub Mobile SDK in a sample Apache Cordova application.
+    </description>
+    <author email="support@sumsub.com" href="https://sumsub.com">
+        Sumsub
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <allow-intent href="market:*" />
+    <preference name="loglevel" value="DEBUG" />
+    <preference name="android-buildToolsVersion" value="29.0.0" />
+    <preference name="android-minSdkVersion" value="21" />
+    <preference name="android-targetSdkVersion" value="29" />
+    <preference name="android-compileSdkVersion" value="29" />
+</widget>

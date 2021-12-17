@@ -1,0 +1,20 @@
+PODS:
+  - IdensicMobileSDK (1.18.2):
+    - IdensicMobileSDK/Default (= 1.18.2)
+  - IdensicMobileSDK/Core (1.18.2)
+  - IdensicMobileSDK/Default (1.18.2):
+    - IdensicMobileSDK/Core
+
+DEPENDENCIES:
+  - IdensicMobileSDK (= 1.18.2)
+
+SPEC REPOS:
+  https://github.com/SumSubstance/Specs.git:
+    - IdensicMobileSDK
+
+SPEC CHECKSUMS:
+  IdensicMobileSDK: 52b66f85bd4f1364bddfa43f07ff0adef44d6dd3
+
+PODFILE CHECKSUM: 77b29537ebc7f43ba1f8d79e329632a96db21ee2
+
+COCOAPODS: 1.10.1

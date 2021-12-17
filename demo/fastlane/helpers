@@ -1,0 +1,109 @@
+def check_env
+
+	unless ENV["FASTLANE_USER"] || could_use_api_key
+
+		UI.error "Aborted: neither FASTLANE_USER nor APP_STORE_CONNECT_API_* are defined"
+		UI.important """
+# Please, create `.env` file and either define the API key params like this:
+#
+# ----- .env ---------------------
+# APP_STORE_CONNECT_API_KEY_KEY_ID={key-id}
+# APP_STORE_CONNECT_API_KEY_ISSUER_ID={the-issuer-id}
+# APP_STORE_CONNECT_API_KEY_KEY_FILEPATH={path-to-p8-file}
+# --------------------------------
+#
+# OR provide your `apple_id` like that:
+#
+# ----- .env ---------------------
+# FASTLANE_USER=felix@krausefx.com
+# --------------------------------
+#
+# and put your password into the keychain with:
+#
+# >bundle exec fastlane fastlane-credentials add --username felix@krausefx.com
+#
+# See more details at
+#     https://docs.fastlane.tools/actions/app_store_connect_api_key/
+#     https://docs.fastlane.tools/advanced/other/#adding-credentials
+#
+#
+# Other CI-useful env vars:
+#
+# ----- .env ---------------------
+# NO_COLOR=true
+# DISABLE_XCPRETTY=true
+#
+# FASTLANE_SKIP_UPDATE_CHECK=true
+# FASTLANE_HIDE_CHANGELOG=true
+# --------------------------------
+#
+  """
+
+  	exit
+	end
+
+end
+
+def guess_new_build_number(options)
+  if !options[:force_build_number].nil?
+    return options[:force_build_number]
+  elsif options[:set_build_number_by_number_of_commits]
+    return number_of_commits()
+  else
+    return nil
+  end
+end
+
+def check_ios_is_clean
+	changes = sh("git status --porcelain ../platforms/ios")
+	if changes.empty?
+		UI.success('Git status of `ios` is clean, all good! 💪')
+	else
+    error_message = "Please ensure the repo is in a clean state for `ios` folder."
+    error_message += "\nUncommitted changes:\n#{changes}"
+    UI.user_error!(error_message)
+	end
+end
+
+def stash_ios_if_required(options)
+  if options[:stash_changes_after_build]
+    sh("git stash push ../platforms/ios")
+    return true
+  else
+    return false
+  end
+end
+
+def could_use_api_key
+	return ENV['APP_STORE_CONNECT_API_KEY_KEY_ID'] && ENV['APP_STORE_CONNECT_API_KEY_ISSUER_ID'] && ENV['APP_STORE_CONNECT_API_KEY_KEY_FILEPATH']
+end
+
+def print_plugin_info
+	info = read_json(file: "../package.json")
+	UI.header "#{info["name"]} v#{info["version"]}"
+	return info
+end
+
+def idensic_sdk_stamp
+  info = JSON.parse(`plutil -convert json -o - ../platforms/ios/Pods/IdensicMobileSDK/IdensicMobileSDK.xcframework/ios-arm64_armv7/IdensicMobileSDK.framework/Info.plist`)
+  return "#{info['CFBundleExecutable']} #{info['CFBundleShortVersionString']}/#{info['CFBundleVersion']}"
+end
+
+def read_json(file: nil)
+	return JSON.parse(File.read(File.join("../", file)))
+end
+
+def oneline(s)
+    return s.strip.split("\n").map{ |line| line.strip }.join(" ")
+end
+
+#
+# Override fastlane_core/lib/fastlane_core/ipa_upload_package_builder.rb
+#
+FastlaneCore::IpaUploadPackageBuilder.class_eval do
+		def unique_ipa_path(ipa_path)
+			ipa_name = File.basename(ipa_path)
+			UI.message "Keep ipa name human readable: #{ipa_name}"
+			return ipa_name
+		end
+end

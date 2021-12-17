@@ -1,0 +1,57 @@
+{
+  "name": "helloworld",
+  "displayName": "HelloCordova",
+  "version": "1.18.2",
+  "description": "A sample Apache Cordova application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ecosystem:cordova"
+  ],
+  "author": "Apache Cordova Team",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@sumsub/cordova-idensic-mobile-sdk-plugin": "file:cordova-idensic-mobile-sdk-plugin",
+    "cordova": "^10.0.0",
+    "cordova-android": "^8.1.0",
+    "cordova-ios": "^5.1.1",
+    "cordova-plugin-androidx": "^2.0.0",
+    "cordova-plugin-androidx-adapter": "^1.1.1",
+    "cordova-plugin-console": "^1.1.0",
+    "cordova-plugin-enable-multidex": "^0.2.0",
+    "cordova-plugin-wkwebview-engine": "^1.2.1"
+  },
+  "devDependencies": {
+    "cordova-plugin-qr-barcode-scanner": "^8.0.3",
+    "cordova-plugin-timer": "^1.0.1",
+    "cordova-plugin-whitelist": "^1.3.4"
+  },
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-enable-multidex": {},
+      "cordova-plugin-androidx": {},
+      "cordova-plugin-androidx-adapter": {},
+      "cordova-plugin-console": {},
+      "cordova-plugin-advanced-http": {
+        "OKHTTP_VERSION": "3.10.0"
+      },
+      "cordova-plugin-qr-barcode-scanner": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+      },
+      "cordova-idensic-mobile-sdk-plugin": {
+        "CAMERA_USAGE": "Let us take a photo",
+        "MICROPHONE_USAGE": "Time to record a video",
+        "PHOTO_USAGE": "Let us pick a photo"
+      },
+      "cordova-plugin-wkwebview-engine": {},
+      "cordova-plugin-timer": {}
+    },
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  }
+}

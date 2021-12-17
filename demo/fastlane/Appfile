@@ -1,0 +1,8 @@
+#
+# For more information about the Appfile, see https://docs.fastlane.tools/advanced/#appfile
+#
+
+app_identifier("com.sumsub.SumSubCordova") # The bundle identifier of your app
+
+itc_team_id("120105535") # App Store Connect Team ID
+team_id("2M257Z2B9X") # Developer Portal Team ID
